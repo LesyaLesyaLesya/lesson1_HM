@@ -42,9 +42,49 @@
 
     ----------------------------------------------------*/
 #include <iostream>
+#include <optional>
+#include <tuple>
+
+using namespace std;
+
+struct Person
+{
+    
+    string _name;
+    string _surname;
+    optional<string> _patronymic;
+
+//public:
+//    friend ostream& operator<< (ostream &out, const Person &person)
+
+
+};
+
+ostream& operator<< (ostream& out, const Person& person)
+{
+    out << person._surname << " " << person._name <<  " " << (person._patronymic.has_value() ? *person._patronymic : "");
+    return out;
+}
+
+bool operator< (const Person& person1, const Person& person2)
+{
+    return tie(person1._surname, person1._name, (person1._patronymic.has_value() ? *person1._patronymic : ""))
+        < tie(person2._surname, person1._name, (person2._patronymic.has_value() ? *person2._patronymic : ""));
+}
+
+bool operator== (const Person& person1, const Person& person2)
+{
+    return tie(person1._surname, person1._name, (person1._patronymic.has_value() ? *person1._patronymic : ""))
+        == tie(person2._surname, person1._name, (person2._patronymic.has_value() ? *person2._patronymic : ""));
+}
+
 
 int main()
 {
+    Person p = {"Lesya", "Sidorova"};
+
+    cout << p;
+    /*
     ifstream file("ХХХ"); // путь к файлу PhoneBook.txt
     PhoneBook book(file);
     cout << book;
@@ -76,7 +116,7 @@ int main()
     cout << "----ChangePhoneNumber----" << endl;
     book.ChangePhoneNumber(Person{ "Kotov", "Vasilii", "Eliseevich" }, PhoneNumber{ 7, 123, "15344458", nullopt });
     book.ChangePhoneNumber(Person{ "Mironova", "Margarita", "Vladimirovna" }, PhoneNumber{ 16, 465, "9155448", 13 });
-    cout << book;
+    cout << book;*/
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
