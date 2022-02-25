@@ -5,7 +5,7 @@
     Требуется написать соответствующие структуры для хранения данных, и заполнить контейнер записями из базы.
     Затем необходимо реализовать методы обработки данных, а также вывести на экран всю необходимую информацию.
 Важно! Имена переменным, классам и функциям давайте осознанные, состоящие из слов на английском языке.
-    1.  Создайте структуру Person с 3 полями: фамилия, имя, отчество. 
+    +1.  Создайте структуру Person с 3 полями: фамилия, имя, отчество. 
     Поле отчество должно быть опционального типа, т.к. не у всех людей есть отчество. 
     Перегрузите оператор вывода данных для этой структуры. 
     Также перегрузите операторы < и == (используйте tie).
@@ -54,9 +54,13 @@ struct Person
     string _surname;
     optional<string> _patronymic;
 
-//public:
-//    friend ostream& operator<< (ostream &out, const Person &person)
-
+};
+struct PhoneNumber
+{
+    int             countryCode;
+    int             cityCode;
+    string          number;
+    optional<int>   extension;
 
 };
 
@@ -78,6 +82,34 @@ bool operator== (const Person& person1, const Person& person2)
         == tie(person2._surname, person1._name, (person2._patronymic.has_value() ? *person2._patronymic : ""));
 }
 
+
+
+/*Для этой структуры перегрузите оператор вывода.
+Необходимо, чтобы номер телефона выводился в формате : +7(911)1234567 12, где 7 – это номер страны, 911 – номер города,
+1234567 – номер, 12 – добавочный номер.Если добавочного номера нет, то его выводить не надо.
+Также перегрузите операторы < и == (используйте tie)*/
+    ostream& operator<< (ostream& out, const PhoneNumber& number)
+{
+    out << "+" << number.countryCode << "(" << number.cityCode << ")" << number.number ;
+    if (number.extension.has_value())
+    {
+        out << " " << number.extension.value();
+
+    }
+    return out;
+}
+
+    bool operator< (const PhoneNumber& number1, const PhoneNumber& number2)
+    {
+        return tie(number1.countryCode, number1.cityCode, number1.number)
+            < tie(number2.countryCode, number2.cityCode, number2.number);
+    }
+
+    bool operator== (const PhoneNumber& number1, const PhoneNumber& number2)
+    {
+        return tie(number1.countryCode, number1.cityCode, number1.number)
+            == tie(number2.countryCode, number2.cityCode, number2.number);
+    }
 
 int main()
 {
