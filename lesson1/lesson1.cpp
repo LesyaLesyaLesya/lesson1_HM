@@ -10,7 +10,7 @@
     Перегрузите оператор вывода данных для этой структуры. 
     Также перегрузите операторы < и == (используйте tie).
 
-    2.  Создайте структуру PhoneNumber с 4 полями:
+    +2.  Создайте структуру PhoneNumber с 4 полями:
 ·         код страны (целое число)
 ·         код города (целое число)
 ·         номер (строка)
@@ -41,84 +41,19 @@
     если находит заданного человека в контейнере, то меняет его номер телефона на новый, иначе ничего не делает. 
 
     ----------------------------------------------------*/
-#include <iostream>
-#include <optional>
-#include <tuple>
+
+
+#include "PhoneBook.h"
 
 using namespace std;
 
-struct Person
-{
-    
-    string _name;
-    string _surname;
-    optional<string> _patronymic;
-
-};
-struct PhoneNumber
-{
-    int             countryCode;
-    int             cityCode;
-    string          number;
-    optional<int>   extension;
-
-};
-
-ostream& operator<< (ostream& out, const Person& person)
-{
-    out << person._surname << " " << person._name <<  " " << (person._patronymic.has_value() ? *person._patronymic : "");
-    return out;
-}
-
-bool operator< (const Person& person1, const Person& person2)
-{
-    return tie(person1._surname, person1._name, (person1._patronymic.has_value() ? *person1._patronymic : ""))
-        < tie(person2._surname, person1._name, (person2._patronymic.has_value() ? *person2._patronymic : ""));
-}
-
-bool operator== (const Person& person1, const Person& person2)
-{
-    return tie(person1._surname, person1._name, (person1._patronymic.has_value() ? *person1._patronymic : ""))
-        == tie(person2._surname, person1._name, (person2._patronymic.has_value() ? *person2._patronymic : ""));
-}
-
-
-
-/*Для этой структуры перегрузите оператор вывода.
-Необходимо, чтобы номер телефона выводился в формате : +7(911)1234567 12, где 7 – это номер страны, 911 – номер города,
-1234567 – номер, 12 – добавочный номер.Если добавочного номера нет, то его выводить не надо.
-Также перегрузите операторы < и == (используйте tie)*/
-    ostream& operator<< (ostream& out, const PhoneNumber& number)
-{
-    out << "+" << number.countryCode << "(" << number.cityCode << ")" << number.number ;
-    if (number.extension.has_value())
+   
+    int main()
     {
-        out << " " << number.extension.value();
-
-    }
-    return out;
-}
-
-    bool operator< (const PhoneNumber& number1, const PhoneNumber& number2)
-    {
-        return tie(number1.countryCode, number1.cityCode, number1.number)
-            < tie(number2.countryCode, number2.cityCode, number2.number);
-    }
-
-    bool operator== (const PhoneNumber& number1, const PhoneNumber& number2)
-    {
-        return tie(number1.countryCode, number1.cityCode, number1.number)
-            == tie(number2.countryCode, number2.cityCode, number2.number);
-    }
-
-int main()
-{
-    Person p = {"Lesya", "Sidorova"};
-
-    cout << p;
-    /*
-    ifstream file("ХХХ"); // путь к файлу PhoneBook.txt
+      
+    ifstream file("phonebook.txt"); // путь к файлу PhoneBook.txt
     PhoneBook book(file);
+
     cout << book;
 
     cout << "------SortByPhone-------" << endl;
@@ -128,7 +63,7 @@ int main()
     cout << "------SortByName--------" << endl;
     book.SortByName();
     cout << book;
-
+    
     cout << "-----GetPhoneNumber-----" << endl;
     // лямбда функция, которая принимает фамилию и выводит номер телефона этого    	человека, либо строку с ошибкой
     auto print_phone_number = [&book](const string& surname) {
@@ -144,11 +79,11 @@ int main()
     // вызовы лямбды
     print_phone_number("Ivanov");
     print_phone_number("Petrov");
-
+    
     cout << "----ChangePhoneNumber----" << endl;
-    book.ChangePhoneNumber(Person{ "Kotov", "Vasilii", "Eliseevich" }, PhoneNumber{ 7, 123, "15344458", nullopt });
-    book.ChangePhoneNumber(Person{ "Mironova", "Margarita", "Vladimirovna" }, PhoneNumber{ 16, 465, "9155448", 13 });
-    cout << book;*/
+    book.ChangePhoneNumber(Person{ "Vasilii","Kotov", "Eliseevich" }, PhoneNumber{ 7, 123, "15344458", nullopt });
+    book.ChangePhoneNumber(Person{ "Margarita","Mironova", "Vladimirovna" }, PhoneNumber{ 16, 465, "9155448", 13 });
+    cout << book;
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
